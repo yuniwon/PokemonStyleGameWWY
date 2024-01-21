@@ -314,72 +314,7 @@ function animate() { // 애니메이션 함수
   }
 
 };
-// animate(); // 애니메이션 함수 실행
 
-const battleBackgroundImg = new Image(); //전투 배경 이미지
-battleBackgroundImg.src = './Images/battleBackground.png';
-const battleBackground = new Sprite({ // 전투 배경 객체
-  position: {
-    x: 0,
-    y: 0
-  },
-  img: battleBackgroundImg
-});
-
-const draggleImg = new Image(); // 드래글 이미지
-draggleImg.src = './Images/draggleSprite.png';
-
-const draggle = new Sprite({
-  position: {
-    x: 800,
-    y: 100
-  },
-  img: draggleImg,
-  frames: {
-    max: 4,
-    hold: 100
-  },
-  animate: true,
-  isEnemy: true,
-})
-
-const embyImg = new Image(); // 드래글 이미지
-embyImg.src = './Images/embySprite.png';
-
-const emby = new Sprite({
-  position: {
-    x: 280,
-    y: 330
-  },
-  img: embyImg,
-  frames: {
-    max: 4,
-    hold: 100
-  },
-  animate: true
-})
-
-function animateBattle() {
-  window.requestAnimationFrame(animateBattle);
-  battleBackground.draw();
-  draggle.draw();
-  emby.draw();
-}
-animateBattle();
-
-document.querySelectorAll('button').forEach(button => {
-  button.addEventListener('click', () => {
-    console.log('클릭');
-    emby.attack({
-      attack: {
-        name: 'Tackle',
-        damage: 10,
-        type: 'normal'
-      },
-      recipient: draggle
-    });
-  })
-})
 
 
 let lastKey = ''; // 마지막으로 눌린 키를 저장 (방향키를 누르고 있을 때, 다른 방향키를 누르면 그 방향으로 움직이게 하기 위함)

@@ -8,8 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <script defer src="data/collisions.js"></script>
   <script defer src="data/battleZones.js"></script>
+  <script defer src="data/attacks.js"></script>
+  <script defer src="data/Monsters.js"></script>
   <script defer src="classes.js"></script>
   <script defer src="index.js"></script>
+  <script defer src="battleScene.js"></script>
   <style>
     * {
       font-family: 'Press Start 2P', system-ui;
@@ -113,6 +116,18 @@
     button:active {
       background-color: #cccccc;
     }
+    #Msgbox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: white;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+      cursor: pointer;
+    }
     #battleWindowHeader {
       width: 66%;
       display: grid;
@@ -148,11 +163,10 @@
   </div>
   <canvas id="canvas"></canvas>
   <div id="battleWindow">
+    <div id="Msgbox">sdasdasdasdf</div>
     <div id="battleWindowHeader">
-<button>태클</button>
-<button>파이어볼</button>
-<!-- <button>Attack3</button>
-<button>Attack4</button> -->
+<!-- <button>Tackle</button>
+<button>Fireball</button> -->
     </div>
     <div id="battleWindowContent">
       <div id="battleWindowContentText"></div>

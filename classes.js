@@ -10,6 +10,8 @@ class Sprite { // 스프라이트 객체
     sprites,
     animate = false,
     isEnemy = false,
+    rotation = 0,
+    name
   }) {
     this.position = position;
     this.img = img;
@@ -26,10 +28,22 @@ class Sprite { // 스프라이트 객체
     this.sprites = sprites;
     this.opacity = 1;
     this.health = 100;
-    this.isEnemy = isEnemy
+    this.isEnemy = isEnemy;
+    this.rotation = rotation;
+    this.name = name;
   }
   draw() { // 그리기 함수
     c.save();
+    c.translate(
+      this.position.x + this.width / 2,
+      this.position.y + this.height / 2
+    );
+
+    c.rotate(this.rotation);
+    c.translate(
+      -(this.position.x + this.width / 2),
+      -(this.position.y + this.height / 2)
+    );
     c.globalAlpha = this.opacity;
     c.drawImage(this.img,
       this.frames.val * this.width,
@@ -55,43 +69,115 @@ class Sprite { // 스프라이트 객체
 
   attack({
     attack,
-    recipient
+    recipient,
+    renderedSprites
   }) {
-    const tl = gsap.timeline(); // 애니메이션 타임라인 생성
+    document.querySelector('#Msgbox').style.display = 'block';
+    document.querySelector('#Msgbox').innerHTML = `${this.name} used ${attack.name}!`;
+
     this.health -= attack.damage; // 공격을 받은 캐릭터의 체력 감소
     let movementDistance = 20;
     if (this.isEnemy) movementDistance = -20;
-
     let healthBar = '.enemyHealthBar';
     if (this.isEnemy) healthBar = '.playerHealthBar'
-    tl.to(this.position, {
-      x: this.position.x - movementDistance,
-    }).to(this.position, {
-      x: this.position.x + movementDistance * 2,
-      duration: 0.1,
-      onComplete: () => {
-        // 적이 맞았을 때
-        gsap.to(healthBar, {
-          // width: `${recipient.health}%`
-          width: this.health + '%'
-        })
-        gsap.to(recipient.position, {
-          x: recipient.position.x + movementDistance * 2,
-          yoyo: true,
-          repeat: 5,
-          duration: 0.08
+    let rotation = 1;
+    if (this.isEnemy) rotation = -2.5;
+    console.log(attack.name)
+    switch (attack.name) {
+      case 'Tackle':
+        const tl = gsap.timeline(); // 애니메이션 타임라인 생성
+        tl.to(this.position, {
+          x: this.position.x - movementDistance,
+        }).to(this.position, {
+          x: this.position.x + movementDistance * 2,
+          duration: 0.1,
+          onComplete: () => {
+            // 적이 맞았을 때
+            gsap.to(healthBar, {
+              // width: `${recipient.health}%`
+              width: this.health + '%'
+            })
+            gsap.to(recipient.position, {
+              x: recipient.position.x + movementDistance * 2,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08
+            });
+            gsap.to(recipient, {
+              opacity: 0.5,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08
+            })
+
+          }
+        }).to(this.position, {
+          x: this.position.x,
         });
-        gsap.to(recipient, {
-          opacity: 0.5,
-          repeat: 5,
-          yoyo: true,
-          duration: 0.08
+
+        break;
+      case 'Fireball':
+        const fireballImg = new Image();
+        fireballImg.src = './Images/fireball.png';
+        const fireball = new Sprite({
+          position: {
+            x: this.position.x,
+            y: this.position.y
+          },
+          img: fireballImg,
+          frames: {
+            max: 4,
+            hold: 10
+          },
+          animate: true,
+          rotation,
+        });
+        // renderedSprites.push(fireball);
+        renderedSprites.splice(1, 0, fireball);
+
+        gsap.to(fireball.position, {
+          x: recipient.position.x,
+          y: recipient.position.y,
+          duration: 0.5,
+          onComplete: () => {
+            renderedSprites.splice(1, 1);
+            // 적이 맞았을 때
+            gsap.to(healthBar, {
+              // width: `${recipient.health}%`
+              width: this.health + '%'
+            })
+            gsap.to(recipient.position, {
+              x: recipient.position.x + movementDistance * 2,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08
+            });
+            gsap.to(recipient, {
+              opacity: 0.5,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08
+            })
+          }
         })
 
-      }
-    }).to(this.position, {
-      x: this.position.x,
-    });
+        break;
+      case 'Heal':
+        this.heal({
+          attack,
+          recipient
+        });
+        break;
+      case 'Slash':
+        this.slash({
+          attack,
+          recipient
+        });
+        break;
+      default:
+        console.log('Invalid attack');
+    }
+
 
   }
 };
