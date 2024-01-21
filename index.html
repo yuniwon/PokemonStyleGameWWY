@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script defer src="data/collisions.js"></script>
+  <script defer src="data/battleZones.js"></script>
+  <script defer src="classes.js"></script>
+  <script defer src="index.js"></script>
+  <style>
+    * {
+      font-family: 'Press Start 2P', system-ui;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      
+    }
+    canvas {
+      display: block;
+    }
+    #overlappingDiv {
+      /* display: none; */
+      background-color: black;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #status {
+      position: absolute;
+      background-color: white ;
+      width: 250px;
+      /* height: 100px; */
+      top: 50px;
+      left: 50px;
+      border: 4px solid black;
+      padding: 20px;
+    }
+    #status2 {
+      position: absolute;
+      background-color: white ;
+      width: 250px;
+      /* height: 100px; */
+      bottom : 180px;
+      right: 50px;
+      border: 4px solid black;
+      padding: 20px;
+
+    }
+
+    #healthBar {
+      position: relative;
+      margin-top: 10px;
+    }
+    #healthBar1 {
+      /* position: absolute; */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: #ccc;
+      border-radius: 10px;
+    }
+    #healthBar2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: green;
+      border-radius: 10px;
+    }
+    #battleWindow {
+      background-color: white;
+      position: absolute;
+      /* width: 200px; */
+      height: 140px;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-top: 4px solid black;
+      border-radius: 10px;
+      /* margin: 10px; */
+      display: flex;
+    }
+    h1{
+      margin: 0;
+      font-size: 26px;
+    }
+    button {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background-color: white;
+      border-radius: 10px;
+      font-size: 26px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e6e6e6;
+    }
+    button:active {
+      background-color: #cccccc;
+    }
+    #battleWindowHeader {
+      width: 66%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    #battleWindowContent {
+      width: 33%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-left: 4px solid black;
+    }
+  </style>
+</head>
+<body>
+<div style="display: inline-block; position: relative;">
+  <div id="overlappingDiv"></div>
+  <div id="status">
+    <h1 id="name">Draggle</h1>
+    <div id="healthBar" >    
+      <div id="healthBar1"></div>
+      <div id="healthBar2" class="enemyHealthBar"></div>
+  </div>
+  </div>
+  <div id="status2">
+    <h1 id="name">Emby</h1>
+    <div id="healthBar">    
+      <div id="healthBar1"></div>
+      <div id="healthBar2" class="playerHealthBar"></div>
+  </div>
+
+  </div>
+  <canvas id="canvas"></canvas>
+  <div id="battleWindow">
+    <div id="battleWindowHeader">
+<button>태클</button>
+<button>파이어볼</button>
+<!-- <button>Attack3</button>
+<button>Attack4</button> -->
+    </div>
+    <div id="battleWindowContent">
+      <div id="battleWindowContentText"></div>
+      <div id="battleWindowContentButtons">
+        <h1 id="battleWindowContentButton1">공격 타입</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
