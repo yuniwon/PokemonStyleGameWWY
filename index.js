@@ -196,6 +196,7 @@ function animate() { // 애니메이션 함수
               opacity: 1,
               duration: 0.4,
               onComplete: () => {
+                initBattle();
                 animateBattle();
                 gsap.to('#overlappingDiv', {
                   opacity: 0,
@@ -315,7 +316,7 @@ function animate() { // 애니메이션 함수
 
 };
 
-
+// animate();
 
 let lastKey = ''; // 마지막으로 눌린 키를 저장 (방향키를 누르고 있을 때, 다른 방향키를 누르면 그 방향으로 움직이게 하기 위함)
 

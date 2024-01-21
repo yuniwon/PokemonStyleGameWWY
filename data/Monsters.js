@@ -16,7 +16,8 @@ const monsters = {
       hold: 100
     },
     animate: true,
-    name: 'Emby',
+    name: '불바다',
+    attacks: [attacks.Tackle, attacks.Fireball],
   },
   Draggle: { // 드래글 객체
     position: {
@@ -30,6 +31,7 @@ const monsters = {
     },
     animate: true,
     isEnemy: true,
-    name: 'Draggle',
+    name: '도롱이',
+    attacks: [attacks.Tackle, attacks.Fireball],
   }
 }

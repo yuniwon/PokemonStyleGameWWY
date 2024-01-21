@@ -10,50 +10,110 @@ const battleBackground = new Sprite({ // 전투 배경 객체
   img: battleBackgroundImg
 });
 
-const draggle = new Sprite(monsters.Draggle); // 드래글 객체
-const emby = new Sprite(monsters.Emby); // 앰비 객체
+let draggle;
+let emby; // 앰비 객체 
+let renderedSprites; // 렌더링된 스프라이트들
+let BattleAnimationId; // 전투 애니메이션 아이디
+let queue; // 전투 대기열
 
-const renderedSprites = [draggle, emby];
-const button = document.createElement('button');
-button.innerHTML = 'Tackle';
-document.querySelector('#battleWindowHeader').append(button);
+function initBattle() { // 전투 초기화 함수
+  document.querySelector('#ui1').style.display = 'block';
+  document.querySelector('#battleWindow').style.display = 'block';
+  // document.querySelector('#battleWindowHeader').innerHTML = 'Choose an attack';
+  draggle = new Monster(monsters.Draggle); // 드래글 객체
+  emby = new Monster(monsters.Emby); // 앰비 객체
+  renderedSprites = [draggle, emby];
+  queue = [];
+
+  emby.attacks.forEach(attack => { // 앰비의 공격을 버튼으로 만들기
+    const button = document.createElement('button');
+    button.innerHTML = attack.name;
+    document.querySelector('#battleWindowHeader').append(button);
+  });
+  document.querySelectorAll('button').forEach(button => { // 전투시 버튼 클릭 이벤트
+    button.addEventListener('click', (e) => {
+      console.log(attacks[e.currentTarget.innerHTML])
+      let skillname = '';
+      if (e.currentTarget.innerHTML === '태클') {
+        skillname = 'Tackle';
+      } else if (e.currentTarget.innerHTML === '파이어볼') {
+        skillname = 'Fireball';
+      }
+      const selectedAttack = attacks[skillname];
+      emby.attack({
+        attack: selectedAttack,
+        recipient: draggle,
+        renderedSprites
+      });
+      if (draggle.health <= 0) {
+        queue.push(() => {
+          draggle.faint();
+        })
+        queue.push(() => {
+          // 암전효과
+          gsap.to('#overlappingDiv', {
+            opacity: 1,
+            onComplete: () => {
+              cancelAnimationFrame(BattleAnimationId);
+              animate();
+              document.querySelector('#ui1').style.display = 'none';
+              document.querySelector('#battleWindow').style.display = 'none';
+              gsap.to('#overlappingDiv', {
+                opacity: 0,
+              })
+            }
+          })
+        })
+      }
+      // 드래글 혹은 적의 공격
+      const randomAttack = draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)];
+
+      queue.push(() => {
+        draggle.attack({
+          attack: randomAttack,
+          recipient: emby,
+          renderedSprites
+        });
+        if (emby.health <= 0) {
+          queue.push(() => {
+            emby.faint();
+          })
+        }
+      })
+    })
+
+    button.addEventListener('mouseenter',
+      (e) => {
+        let skillname = '';
+        if (e.currentTarget.innerHTML === '태클') {
+          skillname = 'Tackle';
+        } else if (e.currentTarget.innerHTML === '파이어볼') {
+          skillname = 'Fireball';
+        }
+        const selectedAttack = attacks[skillname];
+        document.querySelector('#battleWindowContentButton1').innerHTML = `${selectedAttack.name}: <br>${selectedAttack.damage} damage <br>${selectedAttack.type}`;
+        document.querySelector('#battleWindowContentButton1').style.color = selectedAttack.color;
+      }
+    );
+  })
+};
 
 function animateBattle() { // 전투 애니메이션 함수
-  window.requestAnimationFrame(animateBattle);
+  BattleAnimationId = window.requestAnimationFrame(animateBattle);
   battleBackground.draw();
 
   renderedSprites.forEach(sprite => {
     sprite.draw();
   })
 }
+initBattle(); // 전투 초기화 함수 실행
 animateBattle(); // 애니메이션 함수 실행
 
-const queue = []; // 전투 대기열
-
-document.querySelectorAll('button').forEach(button => { // 전투시 버튼 클릭 이벤트
-  button.addEventListener('click', (e) => {
-    console.log(attacks[e.currentTarget.innerHTML])
-    const selectedAttack = attacks[e.currentTarget.innerHTML];
-    emby.attack({
-      attack: selectedAttack,
-      recipient: draggle,
-      renderedSprites
-    });
-
-    queue.push(() => {
-      draggle.attack({
-        attack: attacks.Tackle,
-        recipient: emby,
-        renderedSprites
-      });
-    })
-  })
-})
 
 document.querySelector('#Msgbox').addEventListener('click', (e) => {
   if (queue.length > 0) {
     queue[0]();
-    queue.shift()();
+    queue.shift();
   } else {
     e.currentTarget.style.display = 'none';
   }

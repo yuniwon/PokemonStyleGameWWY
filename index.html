@@ -6,13 +6,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <script defer src="data/collisions.js"></script>
-  <script defer src="data/battleZones.js"></script>
-  <script defer src="data/attacks.js"></script>
-  <script defer src="data/Monsters.js"></script>
-  <script defer src="classes.js"></script>
-  <script defer src="index.js"></script>
-  <script defer src="battleScene.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="data/collisions.js"></script>
+<script defer src="data/battleZones.js"></script>
+<script defer src="data/attacks.js"></script>
+<script defer src="data/Monsters.js"></script>
+<script defer src="classes.js"></script>
+<script defer src="index.js"></script>
+<script defer src="battleScene.js"></script>
+
   <style>
     * {
       font-family: 'Press Start 2P', system-ui;
@@ -37,6 +39,7 @@
       right: 0;
       opacity: 0;
       pointer-events: none;
+      z-index: 10;
     }
 
     #status {
@@ -123,7 +126,8 @@
       right: 0;
       bottom: 0;
       background-color: white;
-      padding: 12px;
+      padding: 20px;
+      font-weight: 600;
       border-radius: 10px;
       display: none;
       cursor: pointer;
@@ -144,30 +148,29 @@
   </style>
 </head>
 <body>
-<div style="display: inline-block; position: relative;">
-  <div id="overlappingDiv"></div>
-  <div id="status">
-    <h1 id="name">Draggle</h1>
-    <div id="healthBar" >    
-      <div id="healthBar1"></div>
-      <div id="healthBar2" class="enemyHealthBar"></div>
-  </div>
-  </div>
-  <div id="status2">
-    <h1 id="name">Emby</h1>
-    <div id="healthBar">    
-      <div id="healthBar1"></div>
-      <div id="healthBar2" class="playerHealthBar"></div>
-  </div>
-
+  <div style="display: inline-block; position: relative;">
+    <div id="ui1" style="display: inline-block; position: relative;">
+    <div id="overlappingDiv"></div>
+    <div id="status">
+      <h1 id="name">도롱이</h1>
+      <div id="healthBar" >    
+        <div id="healthBar1"></div>
+        <div id="healthBar2" class="enemyHealthBar"></div>
+      </div>
+    </div>
+    <div id="status2">
+      <h1 id="name">불바다</h1>
+      <div id="healthBar">    
+        <div id="healthBar1"></div>
+        <div id="healthBar2" class="playerHealthBar"></div>
+      </div>
+    </div>
   </div>
   <canvas id="canvas"></canvas>
   <div id="battleWindow">
-    <div id="Msgbox">sdasdasdasdf</div>
-    <div id="battleWindowHeader">
-<!-- <button>Tackle</button>
-<button>Fireball</button> -->
-    </div>
+      <div id="Msgbox">sdasdasdasdf</div>
+      <div id="battleWindowHeader">
+      </div>
     <div id="battleWindowContent">
       <div id="battleWindowContentText"></div>
       <div id="battleWindowContentButtons">
@@ -179,4 +182,3 @@
 
 </body>
 </html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

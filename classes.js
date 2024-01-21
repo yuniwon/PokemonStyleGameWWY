@@ -9,9 +9,7 @@ class Sprite { // 스프라이트 객체
     },
     sprites,
     animate = false,
-    isEnemy = false,
     rotation = 0,
-    name
   }) {
     this.position = position;
     this.img = img;
@@ -27,10 +25,8 @@ class Sprite { // 스프라이트 객체
     this.animate = animate;
     this.sprites = sprites;
     this.opacity = 1;
-    this.health = 100;
-    this.isEnemy = isEnemy;
     this.rotation = rotation;
-    this.name = name;
+
   }
   draw() { // 그리기 함수
     c.save();
@@ -67,24 +63,72 @@ class Sprite { // 스프라이트 객체
 
   }
 
+
+};
+
+class Monster extends Sprite { // 몬스터 객체
+  constructor({
+    position,
+    velocity,
+    img,
+    frames = {
+      max: 1,
+      hold: 10
+    },
+    sprites,
+    animate = false,
+    rotation = 0,
+    isEnemy = false,
+    name,
+    attacks,
+  }) {
+    super({
+      position,
+      velocity,
+      img,
+      frames,
+      sprites,
+      animate,
+      rotation,
+    });
+    this.health = 100;
+    this.isEnemy = isEnemy;
+    this.name = name;
+    this.attacks = attacks;
+  }
+  faint() { // 쓰러짐 함수
+    document.querySelector('#Msgbox').innerHTML = `${this.name} 이/가 쓰러졌다!`;
+    document.querySelector('#Msgbox').style.display = 'block';
+    gsap.to(this.position, {
+      y: this.position.y + 20,
+    });
+    gsap.to(this, {
+      opacity: 0,
+      // duration: 1,
+    });
+  };
+
+
   attack({
     attack,
     recipient,
     renderedSprites
   }) {
     document.querySelector('#Msgbox').style.display = 'block';
-    document.querySelector('#Msgbox').innerHTML = `${this.name} used ${attack.name}!`;
+    document.querySelector('#Msgbox').innerHTML = `${this.name} 이/가 ${attack.name}을 사용했다!`;
 
-    this.health -= attack.damage; // 공격을 받은 캐릭터의 체력 감소
+    recipient.health -= attack.damage; // 공격을 받은 캐릭터의 체력 감소
+    console.log(this.health)
     let movementDistance = 20;
     if (this.isEnemy) movementDistance = -20;
+
     let healthBar = '.enemyHealthBar';
     if (this.isEnemy) healthBar = '.playerHealthBar'
     let rotation = 1;
     if (this.isEnemy) rotation = -2.5;
     console.log(attack.name)
     switch (attack.name) {
-      case 'Tackle':
+      case '태클':
         const tl = gsap.timeline(); // 애니메이션 타임라인 생성
         tl.to(this.position, {
           x: this.position.x - movementDistance,
@@ -95,7 +139,7 @@ class Sprite { // 스프라이트 객체
             // 적이 맞았을 때
             gsap.to(healthBar, {
               // width: `${recipient.health}%`
-              width: this.health + '%'
+              width: recipient.health + '%'
             })
             gsap.to(recipient.position, {
               x: recipient.position.x + movementDistance * 2,
@@ -109,14 +153,12 @@ class Sprite { // 스프라이트 객체
               yoyo: true,
               duration: 0.08
             })
-
           }
         }).to(this.position, {
           x: this.position.x,
         });
-
         break;
-      case 'Fireball':
+      case '파이어볼':
         const fireballImg = new Image();
         fireballImg.src = './Images/fireball.png';
         const fireball = new Sprite({
@@ -132,9 +174,7 @@ class Sprite { // 스프라이트 객체
           animate: true,
           rotation,
         });
-        // renderedSprites.push(fireball);
         renderedSprites.splice(1, 0, fireball);
-
         gsap.to(fireball.position, {
           x: recipient.position.x,
           y: recipient.position.y,
@@ -143,8 +183,7 @@ class Sprite { // 스프라이트 객체
             renderedSprites.splice(1, 1);
             // 적이 맞았을 때
             gsap.to(healthBar, {
-              // width: `${recipient.health}%`
-              width: this.health + '%'
+              width: recipient.health + '%'
             })
             gsap.to(recipient.position, {
               x: recipient.position.x + movementDistance * 2,
@@ -160,7 +199,6 @@ class Sprite { // 스프라이트 객체
             })
           }
         })
-
         break;
       case 'Heal':
         this.heal({
@@ -180,7 +218,8 @@ class Sprite { // 스프라이트 객체
 
 
   }
-};
+}
+
 
 class Boundary { // 충돌박스 객체
   static width = 48;
