@@ -1,6 +1,7 @@
 const canvas = document.querySelector('canvas'); // 캔버스 선택
 const c = canvas.getContext('2d'); // 캔버스를 2d로 그림
-console.log(gsap)
+// audio.Map.play();
+// console.log(gsap)
 
 
 // console.log(collisions);
@@ -20,7 +21,7 @@ const battleZonesMap = []; // 배틀존을 담을 배열
 for (let i = 0; i < battleZoneData.length; i += 70) { // 충돌박스 그리기
   battleZonesMap.push(battleZoneData.slice(i, i + 70));
 };
-console.log(battleZonesMap);
+// console.log(battleZonesMap);
 
 const boundaries = []; // 충돌박스를 담을 배열
 collisionsMap.forEach((row, rowIndex) => { // 충돌박스를 담을 배열
@@ -72,15 +73,15 @@ playerRightImg.src = './Images/PlayerRight.png';
 
 img.onload = () => { //  그림이 로드되면 실행
   c.drawImage(img, -740, -600); // 웹페이지가 로드되기 전에 그림을 그리면 안그려짐
-  c.drawImage(playerImg,
-    0,
-    0,
-    playerImg.width / 4, // 128 / 4
-    playerImg.height, // 32
-    canvas.width / 2 - (playerImg.width / 4) / 2, // 1024 / 2 - 32 / 2
-    canvas.height / 2 - playerImg.height / 2, // 576 / 2 - 32 / 2
-    playerImg.width / 4, // 128 / 4
-    playerImg.height); // 32
+  //   c.drawImage(playerImg,
+  //     0,
+  //     0,
+  //     playerImg.width / 4, // 128 / 4
+  //     playerImg.height, // 32
+  //     canvas.width / 2 - (playerImg.width / 4) / 2, // 1024 / 2 - 32 / 2
+  //     canvas.height / 2 - playerImg.height / 2, // 576 / 2 - 32 / 2
+  //     playerImg.width / 4, // 128 / 4
+  //     playerImg.height); // 32
 }
 
 const player = new Sprite({ // 플레이어 객체
@@ -152,7 +153,7 @@ const battle = {
 
 function animate() { // 애니메이션 함수
   const animationId = window.requestAnimationFrame(animate); // 1초에 60번 실행
-  console.log(animationId);
+  // console.log(animationId);
   background.draw(); // 배경 그리기
   boundaries.forEach(boundary => { // 충돌박스 그리기
     boundary.draw();
@@ -185,7 +186,10 @@ function animate() { // 애니메이션 함수
         Math.random() < 0.01) { // 전투 확률 // 1% 확률로 전투
         // 전투중에 맵 애니메이션 멈춤
         window.cancelAnimationFrame(animationId);
-        console.log('전투 시작');
+        battle.initiated = true;
+        audio.Map.stop();
+        audio.initBattle.play();
+        audio.battle.play();
         gsap.to('#overlappingDiv', {
           opacity: 1,
           repeat: 3,
@@ -209,7 +213,6 @@ function animate() { // 애니메이션 함수
             })
           }
         })
-        battle.initiated = true;
         break;
       };
     };
@@ -359,4 +362,10 @@ window.addEventListener('keyup', (e) => { // 키보드 입력을 받음
 
       break;
   }
+});
+let clicked = false;
+addEventListener('click', (e) => {
+  if (clicked) return;
+  audio.Map.play();
+  clicked = true;
 });

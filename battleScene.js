@@ -18,7 +18,11 @@ let queue; // 전투 대기열
 
 function initBattle() { // 전투 초기화 함수
   document.querySelector('#ui1').style.display = 'block';
-  document.querySelector('#battleWindow').style.display = 'block';
+  document.querySelector('#battleWindow').style.display = 'flex';
+  document.querySelector('#Msgbox').style.display = 'none';
+  document.querySelector('.enemyHealthBar').style.width = '100%';
+  document.querySelector('.playerHealthBar').style.width = '100%';
+  document.querySelector('#battleWindowHeader').replaceChildren(); // 전투창 헤더 초기화
   // document.querySelector('#battleWindowHeader').innerHTML = 'Choose an attack';
   draggle = new Monster(monsters.Draggle); // 드래글 객체
   emby = new Monster(monsters.Emby); // 앰비 객체
@@ -45,27 +49,34 @@ function initBattle() { // 전투 초기화 함수
         recipient: draggle,
         renderedSprites
       });
-      if (draggle.health <= 0) {
+      if (draggle.health <= 0) { // 드래글이 죽었을 때
+
         queue.push(() => {
-          draggle.faint();
+          draggle.faint(); // 드래글 퇴장
         })
         queue.push(() => {
+
           // 암전효과
-          gsap.to('#overlappingDiv', {
+          gsap.to('#overlappingDiv', { // 암전효과
             opacity: 1,
-            onComplete: () => {
-              cancelAnimationFrame(BattleAnimationId);
-              animate();
+            onComplete: () => { // 암전효과가 끝나면
+              cancelAnimationFrame(BattleAnimationId); //전투 애니메이션 멈춤
+              animate(); // 맵 애니메이션 실행
               document.querySelector('#ui1').style.display = 'none';
               document.querySelector('#battleWindow').style.display = 'none';
               gsap.to('#overlappingDiv', {
                 opacity: 0,
               })
+              audio.battle.stop();
+              audio.Map.play();
             }
           })
         })
+
+        battle.initiated = false;
+        return;
       }
-      // 드래글 혹은 적의 공격
+      // 드래글 혹은 적의 공격 // 랜덤으로 공격
       const randomAttack = draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)];
 
       queue.push(() => {
@@ -78,11 +89,30 @@ function initBattle() { // 전투 초기화 함수
           queue.push(() => {
             emby.faint();
           })
+          queue.push(() => {
+            // 암전효과
+            gsap.to('#overlappingDiv', { // 암전효과
+              opacity: 1,
+              onComplete: () => { // 암전효과가 끝나면
+                cancelAnimationFrame(BattleAnimationId); //전투 애니메이션 멈춤
+                animate(); // 맵 애니메이션 실행
+                document.querySelector('#ui1').style.display = 'none';
+                document.querySelector('#battleWindow').style.display = 'none';
+                gsap.to('#overlappingDiv', {
+                  opacity: 0,
+                })
+                audio.battle.stop();
+                audio.Map.play();
+              }
+            })
+          })
+          battle.initiated = false;
+          return;
         }
       })
     })
 
-    button.addEventListener('mouseenter',
+    button.addEventListener('mouseenter', // 버튼에 마우스 올렸을 때
       (e) => {
         let skillname = '';
         if (e.currentTarget.innerHTML === '태클') {
@@ -90,7 +120,7 @@ function initBattle() { // 전투 초기화 함수
         } else if (e.currentTarget.innerHTML === '파이어볼') {
           skillname = 'Fireball';
         }
-        const selectedAttack = attacks[skillname];
+        const selectedAttack = attacks[skillname]; // 선택된 공격에 대한 정보표시
         document.querySelector('#battleWindowContentButton1').innerHTML = `${selectedAttack.name}: <br>${selectedAttack.damage} damage <br>${selectedAttack.type}`;
         document.querySelector('#battleWindowContentButton1').style.color = selectedAttack.color;
       }
@@ -106,8 +136,9 @@ function animateBattle() { // 전투 애니메이션 함수
     sprite.draw();
   })
 }
-initBattle(); // 전투 초기화 함수 실행
-animateBattle(); // 애니메이션 함수 실행
+animate(); // 애니메이션 함수 실행
+// initBattle(); // 전투 초기화 함수 실행
+// animateBattle(); // 애니메이션 함수 실행
 
 
 document.querySelector('#Msgbox').addEventListener('click', (e) => {
