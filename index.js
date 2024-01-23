@@ -161,6 +161,7 @@ function animate() { // 애니메이션 함수
   battleZones.forEach(battleZone => { // 배틀존 박스 그리기
     battleZone.draw();
   });
+  console.log(player);
   player.draw(); // 플레이어 그리기
   foreground.draw(); // 전경 그리기
 
