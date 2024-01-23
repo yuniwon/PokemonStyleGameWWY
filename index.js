@@ -3,7 +3,7 @@ const c = canvas.getContext('2d'); // 캔버스를 2d로 그림
 // audio.Map.play();
 // console.log(gsap)
 
-
+console.log("여기까지 오나?");
 // console.log(collisions);
 canvas.width = 1024; // 캔버스 크기
 canvas.height = 576; // 캔버스 크기
