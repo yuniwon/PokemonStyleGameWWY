@@ -1,4 +1,3 @@
-// animate(); // 애니메이션 함수 실행
 
 const battleBackgroundImg = new Image(); //전투 배경 이미지
 battleBackgroundImg.src = './Images/battleBackground.png';
@@ -136,10 +135,7 @@ function animateBattle() { // 전투 애니메이션 함수
     sprite.draw();
   })
 }
-animate(); // 애니메이션 함수 실행
-// initBattle(); // 전투 초기화 함수 실행
-// animateBattle(); // 애니메이션 함수 실행
-
+// animate(); // 애니메이션 함수 실행
 
 document.querySelector('#Msgbox').addEventListener('click', (e) => {
   if (queue.length > 0) {
