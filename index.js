@@ -150,7 +150,7 @@ function rectangularCollision({
 const battle = {
   initiated: false,
 }
-
+console.log("여기까지 오나?");
 function animate() { // 애니메이션 함수
   const animationId = window.requestAnimationFrame(animate); // 1초에 60번 실행
   // console.log(animationId);
