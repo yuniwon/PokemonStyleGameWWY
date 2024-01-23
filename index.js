@@ -56,13 +56,13 @@ const foregroundImg = new Image(); // 전경 이미지
 foregroundImg.src = './Images/forgroundObjects.png'
 
 const playerDownImg = new Image(); // 플레이어 이미지
-playerDownImg.src = './Images/playerDown.png';
+playerDownImg.src = './Images/PlayerDown.png';
 const playerUpImg = new Image();
-playerUpImg.src = './Images/playerUp.png';
+playerUpImg.src = './Images/PlayerUp.png';
 const playerLeftImg = new Image();
-playerLeftImg.src = './Images/playerLeft.png';
+playerLeftImg.src = './Images/PlayerLeft.png';
 const playerRightImg = new Image();
-playerRightImg.src = './Images/playerRight.png';
+playerRightImg.src = './Images/PlayerRight.png';
 // 이미지 로드 끝---------------------------------------------------------------------------
 
 // img.onload = () => { //  그림이 로드되면 실행
