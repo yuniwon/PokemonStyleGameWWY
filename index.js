@@ -136,7 +136,7 @@ const movables = [background, ...boundaries, foreground, ...battleZones]; // 움
 function rectangularCollision({
   rect1,
   rect2
-}) { // 충돌박스와 충돌박스가 충돌했는지 확인하는 함수
+}) { // 충돌박스와 충돌했는지 확인하는 함수
   if (rect1.position.x < rect2.position.x + rect2.width &&
     rect1.position.x + rect1.width > rect2.position.x &&
     rect1.position.y < rect2.position.y + rect2.height &&
@@ -149,7 +149,6 @@ function rectangularCollision({
 const battle = {
   initiated: false,
 }
-console.log("여기까지 오나?");
 function animate() { // 애니메이션 함수
   const animationId = window.requestAnimationFrame(animate); // 1초에 60번 실행
   // console.log(animationId);
@@ -160,7 +159,6 @@ function animate() { // 애니메이션 함수
   battleZones.forEach(battleZone => { // 배틀존 박스 그리기
     battleZone.draw();
   });
-  console.log(player);
   player.draw(); // 플레이어 그리기
   foreground.draw(); // 전경 그리기
 

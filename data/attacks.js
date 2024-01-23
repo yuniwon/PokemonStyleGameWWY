@@ -12,7 +12,7 @@ const attacks = {
     color: 'red'
   },
   Heal: {
-    name: 'Heal',
+    name: '힐',
     damage: -10,
     type: '노말',
     color: 'green'
