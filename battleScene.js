@@ -135,7 +135,6 @@ function animateBattle() { // 전투 애니메이션 함수
     sprite.draw();
   })
 }
-// animate(); // 애니메이션 함수 실행
 
 document.querySelector('#Msgbox').addEventListener('click', (e) => {
   if (queue.length > 0) {
