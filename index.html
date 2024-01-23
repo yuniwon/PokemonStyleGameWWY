@@ -65,11 +65,11 @@
 
     }
 
-    #healthBar {
+    #healthBars1, #healthBars2{
       position: relative;
       margin-top: 10px;
     }
-    #healthBar1 {
+    #healthBar1, #healthBar3 {
       /* position: absolute; */
       top: 0;
       left: 0;
@@ -78,7 +78,7 @@
       background-color: #ccc;
       border-radius: 10px;
     }
-    #healthBar2 {
+    #healthBar2, #healthBar4 {
       position: absolute;
       top: 0;
       left: 0;
@@ -153,17 +153,17 @@
     <div id="overlappingDiv"></div>
     <div id="ui1" style="display: none;">
     <div id="status">
-      <h1 id="name">도롱이</h1>
-      <div id="healthBar" >    
+      <h1 id="name1">도롱이</h1>
+      <div id="healthBars1" >    
         <div id="healthBar1"></div>
         <div id="healthBar2" class="enemyHealthBar"></div>
       </div>
     </div>
     <div id="status2">
-      <h1 id="name">불바다</h1>
-      <div id="healthBar">    
-        <div id="healthBar1"></div>
-        <div id="healthBar2" class="playerHealthBar"></div>
+      <h1 id="name2">불바다</h1>
+      <div id="healthBars2">    
+        <div id="healthBar3"></div>
+        <div id="healthBar4" class="playerHealthBar"></div>
       </div>
     </div>
   </div>
