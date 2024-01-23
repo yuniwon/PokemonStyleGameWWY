@@ -1,12 +1,11 @@
+// 캔버스 시작 ----------------------------------------------------------------------
 const canvas = document.querySelector('canvas'); // 캔버스 선택
 const c = canvas.getContext('2d'); // 캔버스를 2d로 그림
-// audio.Map.play();
-// console.log(gsap)
-
-// console.log(collisions);
 canvas.width = 1024; // 캔버스 크기
 canvas.height = 576; // 캔버스 크기
+// 캔버스 끝 ----------------------------------------------------------------------
 
+// 충돌박스 데이터 시작-------------------------------------------------------------
 const offset = { // 배경의 위치를 저장하는 객체
   x: -740,
   y: -650
@@ -20,7 +19,6 @@ const battleZonesMap = []; // 배틀존을 담을 배열
 for (let i = 0; i < battleZoneData.length; i += 70) { // 충돌박스 그리기
   battleZonesMap.push(battleZoneData.slice(i, i + 70));
 };
-// console.log(battleZonesMap);
 
 const boundaries = []; // 충돌박스를 담을 배열
 collisionsMap.forEach((row, rowIndex) => { // 충돌박스를 담을 배열
@@ -49,41 +47,30 @@ battleZonesMap.forEach((row, rowIndex) => {
     }
   });
 });
+// 충돌박스 데이터 끝 -------------------------------------------------------------
 
-// console.log(boundaries);
-// c.fillStyle = 'white'; // 배경색
-// c.fillRect(0, 0, canvas.width, canvas.height); // 배경 그리기
-
-
+// 이미지 로드 ---------------------------------------------------------------
 const img = new Image(); // 배경 이미지
 img.src = './Images/Pellet Town.png';
-
-const foregroundImg = new Image(); // 배경 이미지
+const foregroundImg = new Image(); // 전경 이미지
 foregroundImg.src = './Images/forgroundObjects.png'
 
 const playerDownImg = new Image(); // 플레이어 이미지
-playerDownImg.src = './Images/PlayerDown.png';
+playerDownImg.src = './Images/playerDown.png';
 const playerUpImg = new Image();
-playerUpImg.src = './Images/PlayerUp.png';
+playerUpImg.src = './Images/playerUp.png';
 const playerLeftImg = new Image();
-playerLeftImg.src = './Images/PlayerLeft.png';
+playerLeftImg.src = './Images/playerLeft.png';
 const playerRightImg = new Image();
-playerRightImg.src = './Images/PlayerRight.png';
+playerRightImg.src = './Images/playerRight.png';
+// 이미지 로드 끝---------------------------------------------------------------------------
 
-img.onload = () => { //  그림이 로드되면 실행
-  c.drawImage(img, -740, -600); // 웹페이지가 로드되기 전에 그림을 그리면 안그려짐
-  //   c.drawImage(playerImg,
-  //     0,
-  //     0,
-  //     playerImg.width / 4, // 128 / 4
-  //     playerImg.height, // 32
-  //     canvas.width / 2 - (playerImg.width / 4) / 2, // 1024 / 2 - 32 / 2
-  //     canvas.height / 2 - playerImg.height / 2, // 576 / 2 - 32 / 2
-  //     playerImg.width / 4, // 128 / 4
-  //     playerImg.height); // 32
-}
+// img.onload = () => { //  그림이 로드되면 실행
+//   c.drawImage(img, -740, -600); // 웹페이지가 로드되기 전에 그림을 그리면 안그려짐
+// }
 
-const player = new Sprite({ // 플레이어 객체
+// 스프라이트 시작 -----------------------------------------------------------------------
+const player = new Sprite({ // 플레이어 스프라이트 속성
   position: {
     x: canvas.width / 2 - 192 / 4 / 2,
     y: canvas.height / 2 - 68 / 2
@@ -91,7 +78,7 @@ const player = new Sprite({ // 플레이어 객체
   img: playerDownImg,
   frames: {
     max: 4,
-    hold: 20
+    hold: 10
   },
   sprites: {
     up: playerUpImg,
@@ -100,7 +87,7 @@ const player = new Sprite({ // 플레이어 객체
     right: playerRightImg,
   }
 });
-const background = new Sprite({ // 배경 객체
+const background = new Sprite({ // 배경 스프라이트 속성
   position: {
     x: offset.x,
     y: offset.y
@@ -108,14 +95,16 @@ const background = new Sprite({ // 배경 객체
   img: img
 });
 
-const foreground = new Sprite({ // 전경 객체
+const foreground = new Sprite({ // 전경 스프라이트 속성
   position: {
     x: offset.x,
     y: offset.y
   },
   img: foregroundImg
 });
+// 스프라이트 끝 -----------------------------------------------------------------------
 
+// 키보드 입력 시작 ---------------------------------------------------------------------
 const keys = { // 키보드 입력을 받기 위한 객체
   w: {
     pressed: false
@@ -130,13 +119,17 @@ const keys = { // 키보드 입력을 받기 위한 객체
     pressed: false
   }
 }
+// 키보드 입력 끝 -----------------------------------------------------------------------
 
 
-const movables = [background, ...boundaries, foreground, ...battleZones]; // 움직이는 객체들을 담을 배열
-function rectangularCollision({
+const movables = [background, ...boundaries, foreground, ...battleZones]; // 움직이는 객체들
+// 플레이어는 화면 중앙에 고정되어 있고, 배경과 충돌박스들이 움직임
+
+// 충돌확인 함수 시작 ---------------------------------------------------------------------
+function rectangularCollision({  
   rect1,
   rect2
-}) { // 충돌박스와 충돌했는지 확인하는 함수
+}) { 
   if (rect1.position.x < rect2.position.x + rect2.width &&
     rect1.position.x + rect1.width > rect2.position.x &&
     rect1.position.y < rect2.position.y + rect2.height &&
@@ -145,10 +138,13 @@ function rectangularCollision({
   }
   return false;
 }
+// 충돌확인 함수 끝 -----------------------------------------------------------------------
 
-const battle = {
+const battle = { // 전투중인지 확인
   initiated: false,
 }
+
+// 화면 애니메이션 시작 ---------------------------------------------------------------------
 function animate() { // 애니메이션 함수
   const animationId = window.requestAnimationFrame(animate); // 1초에 60번 실행
   // console.log(animationId);
@@ -203,9 +199,6 @@ function animate() { // 애니메이션 함수
                 gsap.to('#overlappingDiv', {
                   opacity: 0,
                   duration: 0.4,
-                  // onComplete: () => {
-                  //   window.requestAnimationFrame(animateBattle);
-                  // }
                 })
               }
             })
@@ -215,7 +208,6 @@ function animate() { // 애니메이션 함수
       };
     };
   };
-
 
   if (keys.w.pressed && lastKey === 'w') { // 방향키를 누르면 배경이 움직이게 함
     player.animate = true;
@@ -316,12 +308,13 @@ function animate() { // 애니메이션 함수
   }
 
 };
+// 화면 애니메이션 끝 ---------------------------------------------------------------------
 
-animate();
+animate(); // 애니메이션 실행
 
+// 키보드 입력 시작 ---------------------------------------------------------------------
 let lastKey = ''; // 마지막으로 눌린 키를 저장 (방향키를 누르고 있을 때, 다른 방향키를 누르면 그 방향으로 움직이게 하기 위함)
-
-window.addEventListener('keydown', (e) => { // 키보드 입력을 받음
+window.addEventListener('keydown', (e) => { // 키다운 이벤트 리스너
   switch (e.key) {
     case 'w':
       keys.w.pressed = true;
@@ -341,29 +334,29 @@ window.addEventListener('keydown', (e) => { // 키보드 입력을 받음
       break;
   }
 });
-window.addEventListener('keyup', (e) => { // 키보드 입력을 받음
+window.addEventListener('keyup', (e) => { // 키업 이벤트 리스너
   switch (e.key) {
     case 'w':
       keys.w.pressed = false;
-
       break;
     case 's':
       keys.s.pressed = false;
-
       break;
     case 'a':
       keys.a.pressed = false;
-
       break;
     case 'd':
       keys.d.pressed = false;
-
       break;
   }
 });
-let clicked = false;
-addEventListener('click', (e) => {
-  if (clicked) return;
-  audio.Map.play();
-  clicked = true;
+// 키보드 입력 끝 -----------------------------------------------------------------------
+
+// 배경음악 시작 ---------------------------------------------------------------------
+let clicked = false; // 마우스가 클릭되었는지 확인
+addEventListener('click', (e) => { // 배경에 마우스가 클릭되었을 때 음악을 재생
+  if (clicked) return; // 배경음이 계속 재생되는것을 방지
+  audio.Map.play(); // 배경음 재생
+  clicked = true; // 배경음이 재생되었음을 확인
 });
+// 배경음악 끝 -----------------------------------------------------------------------
