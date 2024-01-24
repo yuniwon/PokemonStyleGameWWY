@@ -21,6 +21,7 @@ const monsters = {
     isEnemy: false,
     name: '불바다',
     attacks: [attacks.Tackle, attacks.Fireball, attacks.Heal],
+    hp : 100,
   },
   Draggle: { // 드래글 객체
     position: {
@@ -38,5 +39,6 @@ const monsters = {
     isEnemy: true,
     name: '도롱이',
     attacks: [attacks.Tackle, attacks.Fireball],
+    hp : 100,
   }
 }

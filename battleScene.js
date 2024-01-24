@@ -35,11 +35,11 @@ function initBattle() { // 전투 초기화 함수
   emby.attacks.forEach(attack => { // 앰비의 공격을 버튼으로 만들기
     const button = document.createElement('button');
     // button.className = attack.name;
-    button.innerHTML = attack.name;
-    document.querySelector('#battleWindowHeader').append(button);
+    button.innerHTML = attack.name; // 버튼에 공격이름 표시
+    document.querySelector('#battleWindowHeader').append(button); // 버튼을 전투창 헤더에 추가
   });
   document.querySelectorAll('button').forEach(button => { // 전투시 버튼 클릭 이벤트
-    button.addEventListener('click', (e) => {
+    button.addEventListener('click', (e) => { // 버튼 클릭시
       // 스킬네임 영어로 바꾸기 --------------------------------------------------------------
       let skillname = '';
       if (e.currentTarget.innerHTML === '태클') {
@@ -49,11 +49,11 @@ function initBattle() { // 전투 초기화 함수
       }else if(e.currentTarget.innerHTML === '힐'){
         skillname = 'Heal';
       }
-      const selectedAttack = attacks[skillname];
+      const selectedAttack = attacks[skillname]; // 선택된 공격에 대한 정보표시
       // 스킬네임 영어로 바꾸기 끝 --------------------------------------------------------------
       // 앰비 혹은 적의 공격 // 선택된 공격에 대한 정보표시
-      let recipient = '';
-      if(skillname === 'Heal'){
+      let recipient = ''; // 공격받는 대상
+      if(skillname === 'Heal'){ // 힐일 경우
         recipient = emby;
       }else{
         recipient = draggle;
