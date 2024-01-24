@@ -123,17 +123,14 @@ class Monster extends Sprite {
   }) {
     document.querySelector('#Msgbox').style.display = 'block';
     document.querySelector('#Msgbox').innerHTML = `${this.name} 이/가 ${attack.name}을 사용했다!`;
-
+    console.log(recipient);
     recipient.health -= attack.damage; // 공격을 받은 캐릭터의 체력 감소
-    console.log(this.health)
     let movementDistance = 20;
     if (this.isEnemy) movementDistance = -20;
-
     let healthBar = '.enemyHealthBar';
     if (this.isEnemy) healthBar = '.playerHealthBar'
     let rotation = 1;
     if (this.isEnemy) rotation = -2.5;
-    console.log(attack.name)
     switch (attack.name) {
       case '태클': // 태클 공격
         const tl = gsap.timeline(); // 애니메이션 타임라인 생성
@@ -210,10 +207,35 @@ class Monster extends Sprite {
           }
         })
         break;
-      case 'Heal':
-        this.heal({
-          attack,
-          recipient
+      case '힐':
+        const tl2 = gsap.timeline(); // 애니메이션 타임라인 생성
+        tl2.to(this.position, {
+          x: this.position.x - movementDistance,
+        }).to(this.position, {
+          x: this.position.x + movementDistance * 2,
+          duration: 0.1,
+          onComplete: () => {
+            // 적이 맞았을 때
+            audio.tackleHit.play(); // 태클 효과음
+            gsap.to(healthBar, {
+              // width: `${recipient.health}%`
+              width: recipient.health + '%'
+            })
+            gsap.to(recipient.position, {
+              x: recipient.position.x + movementDistance * 2,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08
+            });
+            gsap.to(recipient, {
+              opacity: 0.5,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08
+            })
+          }
+        }).to(this.position, {
+          x: this.position.x,
         });
         break;
       case 'Slash':

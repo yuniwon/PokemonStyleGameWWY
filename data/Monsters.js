@@ -18,8 +18,9 @@ const monsters = {
       hold: 100
     },
     animate: true,
+    isEnemy: false,
     name: '불바다',
-    attacks: [attacks.Tackle, attacks.Fireball],
+    attacks: [attacks.Tackle, attacks.Fireball, attacks.Heal],
   },
   Draggle: { // 드래글 객체
     position: {
