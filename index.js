@@ -209,7 +209,7 @@ function animate() { // 애니메이션 함수
     };
   };
 
-  if (keys.w.pressed && lastKey === 'w') { // 방향키를 누르면 배경이 움직이게 함
+  if (keys.w.pressed && lastKey === 'w') { // 방향키를 누르면 배경이 움직이게 함 // 굉장히 하드코딩 되어있음. 피자레전드를 보면 카메라를 고정해 줄 좌표를 설정한 뒤에 그 좌표를 기준으로 모든 객체를 움직이게 하는 방식으로 구현할 수 있음
     player.animate = true;
     player.img = player.sprites.up;
     for (let i = 0; i < boundaries.length; i++) {

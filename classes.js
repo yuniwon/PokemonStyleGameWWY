@@ -127,8 +127,12 @@ class Monster extends Sprite {
     recipient.health -= attack.damage; // 공격을 받은 캐릭터의 체력 감소
     let movementDistance = 20;
     if (this.isEnemy) movementDistance = -20;
-    let healthBar = '.enemyHealthBar';
-    if (this.isEnemy) healthBar = '.playerHealthBar'
+    let healthBar = '';
+    if(attack.damage < 0 || this.isEnemy){
+      healthBar = '.playerHealthBar'
+    }else{
+      healthBar = '.enemyHealthBar';
+    }
     let rotation = 1;
     if (this.isEnemy) rotation = -2.5;
     switch (attack.name) {

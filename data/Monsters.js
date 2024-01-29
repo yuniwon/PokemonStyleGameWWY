@@ -19,7 +19,7 @@ const monsters = {
     },
     animate: true,
     isEnemy: false,
-    name: '불바다',
+    name: '활활이',
     attacks: [attacks.Tackle, attacks.Fireball, attacks.Heal],
     hp : 100,
   },
